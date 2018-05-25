@@ -56,4 +56,8 @@ def numbers_to_expression(symbols):
 def calculate_result(expression):
     parser = Parser()
     str_expression = "".join(str(x) for x in expression)
-    return parser.parse(str_expression).evaluate({})
+    result = parser.parse(str_expression).evaluate({})
+    return {
+        "expression": str_expression,
+        "result": result
+    }
