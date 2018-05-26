@@ -14,7 +14,7 @@ def extract_text(msg):
         for line in lines:
             raw_message += list(line["text"])
 
-        logger.debug("Raw_message: {}".format("".join(raw_message)))
+        logger.debug("RAW Message: {}".format("".join(raw_message)))
         return "".join(raw_message)
 
     except Exception as e:
@@ -34,4 +34,7 @@ def calculate_result(expression):
             "result": result
         }
     except Exception as e:
-        return str(e) + "\n" + expression
+        return {
+            "expression": expression,
+            "error": str(e)
+        }

@@ -11,32 +11,15 @@ from logging.config import dictConfig
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-
 should_listen = True
 bot = telepot.Bot("***REMOVED***")
 
 
 def evaluate_math_expresion_from_image(image_file):
     results = query_cognitive_vision(image_file)
-
-    # with open('results.json', 'w') as file:
-    #     json.dump(results, file)
-    #
-    # with open('results.json', 'r') as file:
-    #     results = json.load(file)
-    #
-    # print(json.dumps(results, indent=2))
-
     string_expression = extract_text(results)
     evaluation = calculate_result(string_expression)
 
-    # str_numbers, raw_message = extract_symbols_from_text(result
-    # s)
-    # logger.debug("str_numbers: {}".format(str_numbers))
-    # expression = numbers_to_expression(str_numbers)
-    # logger.debug("Expression: {}".format(expression))
-    # evaluation = calculate_result(expression)
-    # logger.debug("Result: {} = {}".format(evaluation["expression"], evaluation["result"]))
     return evaluation
 
 
@@ -54,7 +37,6 @@ def on_messaged_arrived(msg):
     if content_type == 'photo':
         bot.sendMessage(chat_id, "I'm doing the math")
         file_id = msg["photo"][-1]["file_id"]
-        # ("file_id:", file_id)
 
         file_path = os.path.join("downloads", file_id)
 
@@ -65,12 +47,14 @@ def on_messaged_arrived(msg):
 
         image_file = open(os.path.join(dir_path, file_path), "rb").read()
         evaluation = evaluate_math_expresion_from_image(image_file)
-        if type(evaluation) != str:
+
+        if "result" in evaluation:
             bot.sendMessage(chat_id, "Result:\n {} = {:.2f}".format(evaluation["expression"], evaluation["result"]))
         else:
-            message = "Something is wrong with your expression: " + evaluation
+            message = "Something is wrong with your expression: \"{}\"\n{} ".format(evaluation["expression"],
+                                                                                    evaluation["error"])
             bot.sendMessage(chat_id, message)
-            logger.debug("Wrong equation: " + evaluation)
+            logger.debug("Wrong equation: " + evaluation["error"])
 
 
 def start_listening_bot():
