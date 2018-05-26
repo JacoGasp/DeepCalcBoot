@@ -6,15 +6,16 @@ import telepot
 from telepot.loop import MessageLoop
 import time
 import os
-
 import logging
 import yaml
 from logging.config import dictConfig
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 logger = logging.getLogger('DeepCalculatorBot')
 logger_msg = logging.getLogger('DeepCalculatorBotMsg')
 
 # create the logger
-with open('logging.yaml', 'rt') as f:
+with open(os.path.join(dir_path, 'logging.yaml'), 'rt') as f:
     config = yaml.safe_load(f.read())
 dictConfig(config)
 
@@ -64,7 +65,7 @@ def on_messaged_arrived(msg):
             bot.download_file(file_id, "downloads/" + file_id)
             logger.debug("Done.")
 
-        image_file = open(file_path, "rb").read()
+        image_file = open(os.path.join(dir_path, file_path), "rb").read()
         try:
             evaluation = evaluate_math_expresion_from_image(image_file)
             bot.sendMessage(chat_id, "Result:\n {} = {:.2f}".format(evaluation["expression"], evaluation["result"]))
@@ -82,9 +83,9 @@ def start_listening_bot():
 
 if __name__ == "__main__":
     try:
-        logger.info("Started.")
+        logger.info("Good morning! I'm now listening to new messages.")
         start_listening_bot()
 
     except KeyboardInterrupt:
         should_listen = False
-        logger.info("Closing DeepCalculatorBot. Bye")
+        logger.info("Closing DeepCalculatorBot. Good night, Bye")
