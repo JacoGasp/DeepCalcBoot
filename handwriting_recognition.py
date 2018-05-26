@@ -1,4 +1,5 @@
 import requests
+#from app import logger
 
 subscription_key = "3f81c5a2ea2749a182845adeea68580e"
 assert subscription_key
@@ -8,16 +9,16 @@ text_recognition_url = vision_base_url + "RecognizeText"
 
 
 def query_cognitive_vision(image_data):
-    headers = {'Ocp-Apim-Subscription-Key': subscription_key}
     # Note: The request parameter changed for APIv2.
     # For APIv1, it is 'handwriting': 'true'.
+#    logger.INFO("Querying Cognitive Services")
     params = {'mode': 'Handwritten'}
     headers = {'Ocp-Apim-Subscription-Key': subscription_key,
                'Content-Type': 'application/octet-stream'}
 
     response = requests.post(text_recognition_url, headers=headers,
                              params=params, data=image_data)
-    print(response.url)
+    # print(response.url)
     response.raise_for_status()
 
     # The 'analysis' object contains various fields that describe the image. The most

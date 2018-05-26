@@ -1,5 +1,5 @@
 from py_expression_eval import Parser
-
+# import app
 
 def extract_symbols_from_text(msg):
 
@@ -22,7 +22,8 @@ def extract_symbols_from_text(msg):
         return str_numbers
 
     except Exception as e:
-        print(e)
+        print()
+        # app.logger.exception(e)
 
 
 def numbers_to_expression(symbols):
