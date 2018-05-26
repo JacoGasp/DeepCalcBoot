@@ -1,5 +1,4 @@
 import json
-
 from handwriting_recognition import *
 from mathematics import *
 import telepot
@@ -11,20 +10,13 @@ import yaml
 from logging.config import dictConfig
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-logger = logging.getLogger('DeepCalculatorBot')
-logger_msg = logging.getLogger('DeepCalculatorBotMsg')
 
-# create the logger
-with open(os.path.join(dir_path, 'logging.yaml'), 'rt') as f:
-    config = yaml.safe_load(f.read())
-dictConfig(config)
 
 should_listen = True
 bot = telepot.Bot("***REMOVED***")
 
 
 def evaluate_math_expresion_from_image(image_file):
-    print("Query online Cognitive Services")
     results = query_cognitive_vision(image_file)
 
     # with open('results.json', 'w') as file:
@@ -36,21 +28,23 @@ def evaluate_math_expresion_from_image(image_file):
     # print(json.dumps(results, indent=2))
 
     str_numbers = extract_symbols_from_text(results)
-    logger.debug("str_numbers", str_numbers)
+    logger.debug("str_numbers: {}".format(str_numbers))
     expression = numbers_to_expression(str_numbers)
-    logger.debug("Expression:", expression)
+    logger.debug("Expression: {}".format(expression))
     evaluation = calculate_result(expression)
-    # print("Result", "{} = {}".format(evaluation["expression"], evaluation["result"]))
+    logger.debug("Result: {} = {}".format(evaluation["expression"], evaluation["result"]))
     return evaluation
 
 
 def on_messaged_arrived(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
-    # print(content_type, chat_type, chat_id)
-    logger.info("Message arrived")
+    logger.info("Message arrived from: {}".format(chat_id))
+    logger.debug("Message info: Content Type: {}; Chat Type: {}; Chat Id: {}".format(content_type, chat_type, chat_id))
+
     logger_msg.info(json.dumps(msg, indent=2))
 
     if content_type != 'photo':
+        logger.info("Message is not image but type {}".format(content_type))
         bot.sendMessage(chat_id, "Please send me an image containing an arithmetical expression.")
 
     if content_type == 'photo':
@@ -61,7 +55,7 @@ def on_messaged_arrived(msg):
         file_path = os.path.join("downloads", file_id)
 
         if not os.path.isfile(file_path):
-            logger.debug("Downloading file...", end=" ")
+            logger.debug("Downloading file...")
             bot.download_file(file_id, "downloads/" + file_id)
             logger.debug("Done.")
 
@@ -82,6 +76,14 @@ def start_listening_bot():
 
 
 if __name__ == "__main__":
+    logger = logging.getLogger('DeepCalculatorBot')
+    logger_msg = logging.getLogger('DeepCalculatorBotMsg')
+
+    # create the logger
+    with open(os.path.join(dir_path, 'logging.yaml'), 'rt') as f:
+        config = yaml.safe_load(f.read())
+    dictConfig(config)
+
     try:
         logger.info("Good morning! I'm now listening to new messages.")
         start_listening_bot()

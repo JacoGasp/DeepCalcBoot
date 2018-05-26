@@ -1,5 +1,9 @@
 import requests
-#from app import logger
+import logging
+
+import app
+
+logger = logging.getLogger('DeepCalculatorBot')
 
 subscription_key = "3f81c5a2ea2749a182845adeea68580e"
 assert subscription_key
@@ -11,7 +15,7 @@ text_recognition_url = vision_base_url + "RecognizeText"
 def query_cognitive_vision(image_data):
     # Note: The request parameter changed for APIv2.
     # For APIv1, it is 'handwriting': 'true'.
-#    logger.INFO("Querying Cognitive Services")
+    logger.info("Querying Cognitive Services")
     params = {'mode': 'Handwritten'}
     headers = {'Ocp-Apim-Subscription-Key': subscription_key,
                'Content-Type': 'application/octet-stream'}

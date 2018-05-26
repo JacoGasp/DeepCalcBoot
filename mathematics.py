@@ -1,5 +1,8 @@
 from py_expression_eval import Parser
-# import app
+import logging
+
+logger = logging.getLogger('DeepCalculatorBot')
+
 
 def extract_symbols_from_text(msg):
 
@@ -12,22 +15,22 @@ def extract_symbols_from_text(msg):
         str_numbers = []
         for line in lines:
             str_numbers += list(line["text"])
-        str_numbers = [x for x in str_numbers if x in "1234567890.+-*/()"]
+        str_numbers = [x for x in str_numbers if x in "1234567890.+-*x:÷/()"]
 
         i = 0
         while not str_numbers[i].isdigit():
             del(str_numbers[i])
             break
-
+        logger.debug(str_numbers)
         return str_numbers
 
     except Exception as e:
         print()
-        # app.logger.exception(e)
+        logger.exception(e)
 
 
 def numbers_to_expression(symbols):
-    i = 0
+
     expression = []
     clusters = [[]]
     j = 0
@@ -51,6 +54,7 @@ def numbers_to_expression(symbols):
     if type(expression[-1]) != int and not expression[-1].isdigit():
         expression.pop(-1)
 
+    logger.debug("Expression: {}".format(expression))
     return expression
 
 
@@ -58,6 +62,8 @@ def calculate_result(expression):
     parser = Parser()
     str_expression = "".join(str(x) for x in expression)
     result = parser.parse(str_expression).evaluate({})
+    logger.debug(result)
+
     return {
         "expression": str_expression,
         "result": result

@@ -47,7 +47,7 @@ loggers:
         propagate: no
 
     DeepCalculatorBot:
-        level: INFO
+        level: DEBUG
         handlers: [console, info_file_handler]
 
     DeepCalculatorBotMsg:
