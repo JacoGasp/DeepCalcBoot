@@ -1,8 +1,6 @@
 import requests
 import logging
 
-import app
-
 logger = logging.getLogger('DeepCalculatorBot')
 
 subscription_key = "3f81c5a2ea2749a182845adeea68580e"
