@@ -1,3 +1,4 @@
+PyYAML
 requests
 telepot
 py_expression_eval
