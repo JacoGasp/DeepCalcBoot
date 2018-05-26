@@ -27,12 +27,16 @@ def evaluate_math_expresion_from_image(image_file):
     #
     # print(json.dumps(results, indent=2))
 
-    str_numbers = extract_symbols_from_text(results)
-    logger.debug("str_numbers: {}".format(str_numbers))
-    expression = numbers_to_expression(str_numbers)
-    logger.debug("Expression: {}".format(expression))
-    evaluation = calculate_result(expression)
-    logger.debug("Result: {} = {}".format(evaluation["expression"], evaluation["result"]))
+    string_expression = extract_text(results)
+    evaluation = calculate_result(string_expression)
+
+    # str_numbers, raw_message = extract_symbols_from_text(result
+    # s)
+    # logger.debug("str_numbers: {}".format(str_numbers))
+    # expression = numbers_to_expression(str_numbers)
+    # logger.debug("Expression: {}".format(expression))
+    # evaluation = calculate_result(expression)
+    # logger.debug("Result: {} = {}".format(evaluation["expression"], evaluation["result"]))
     return evaluation
 
 
@@ -60,17 +64,17 @@ def on_messaged_arrived(msg):
             logger.debug("Done.")
 
         image_file = open(os.path.join(dir_path, file_path), "rb").read()
-        try:
-            evaluation = evaluate_math_expresion_from_image(image_file)
+        evaluation = evaluate_math_expresion_from_image(image_file)
+        if type(evaluation) != str:
             bot.sendMessage(chat_id, "Result:\n {} = {:.2f}".format(evaluation["expression"], evaluation["result"]))
-        except Exception as e:
-            bot.sendMessage(chat_id, "I'm sorry but I cannot understand your writing. Put much effort in it, please!")
-            logger.exception(e)
+        else:
+            message = "Something is wrong with your expression: " + evaluation
+            bot.sendMessage(chat_id, message)
+            logger.debug("Wrong equation: " + evaluation)
 
 
 def start_listening_bot():
     MessageLoop(bot, on_messaged_arrived).run_as_thread()
-    logger.info('Listening ...')
     while should_listen:
         time.sleep(10)
 
@@ -85,9 +89,9 @@ if __name__ == "__main__":
     dictConfig(config)
 
     try:
-        logger.info("Good morning! I'm now listening to new messages.")
+        logger.info("Good morning! I'm now listening to new messages.\n")
         start_listening_bot()
 
     except KeyboardInterrupt:
         should_listen = False
-        logger.info("Closing DeepCalculatorBot. Good night, Bye")
+        logger.info("Closing DeepCalculatorBot. Good night, Bye\n")
