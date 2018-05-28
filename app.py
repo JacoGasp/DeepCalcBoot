@@ -15,7 +15,7 @@ should_listen = True
 bot = telepot.Bot("***REMOVED***")
 
 
-def evaluate_math_expresion_from_image(image_file):
+def evaluate_math_expression_from_image(image_file):
     results = query_cognitive_vision(image_file)
     string_expression = extract_text(results)
     evaluation = calculate_result(string_expression)
@@ -46,14 +46,14 @@ def on_messaged_arrived(msg):
             logger.debug("Done.")
 
         image_file = open(os.path.join(dir_path, file_path), "rb").read()
-        evaluation = evaluate_math_expresion_from_image(image_file)
+        evaluation = evaluate_math_expression_from_image(image_file)
 
         if "result" in evaluation:
-            bot.sendMessage(chat_id, "Result:\n {} = {:.2f}".format(evaluation["expression"], evaluation["result"]))
+            bot.sendMessage(chat_id, "Result:\n{} = {:.2f}".format(evaluation["expression"], evaluation["result"]))
         else:
-            message = "Something is wrong with your expression: \"{}\"\n{} ".format(evaluation["expression"],
-                                                                                    evaluation["error"])
-            bot.sendMessage(chat_id, message)
+            message = "Something is wrong with your expression: *{}*\n{} ".format(evaluation["expression"],
+                                                                                  evaluation["error"])
+            bot.sendMessage(chat_id, message, parse_mode="markdown")
             logger.debug("Wrong equation: " + evaluation["error"])
 
 

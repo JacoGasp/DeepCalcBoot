@@ -25,6 +25,8 @@ def calculate_result(expression):
     try:
         expression = expression.replace(":", "/")
         expression = expression.replace("x", "*")
+        expression = expression.replace(" ", "").replace("+", " + ").replace("-", " - ").replace("*", " * ").replace(
+            "/", " / ")
         parser = Parser()
         result = parser.parse(expression).evaluate({})
         logger.debug("Result: {:.2f}".format(result))
