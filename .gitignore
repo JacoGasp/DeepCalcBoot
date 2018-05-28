@@ -1,3 +1,7 @@
 .DS_Store
-dataset
-extracted_images
+/ObjectDetection/dataset
+/ObjectDetection/extracted_images
+/ObjectDetection/.ipynb_checkpoints/
+.idea/
+__pycache__/
+downloads/
