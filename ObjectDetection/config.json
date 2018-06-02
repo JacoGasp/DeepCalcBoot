@@ -1,0 +1,31 @@
+{
+    "model": {
+        "backend": "Full Yolo",
+        "input_size": 416,
+        "anchors": [],
+        "max_box_per_image": 10,
+        "labels": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "times", "div", "forward_slash", "(", ")", "[", "]", 
+          "{", "}", "!", ","]
+    },
+    "train": {
+        "train_image_folder": "/home/jacopo.gasparetto/Workspaces/DeepCalculatorBot/ObjectDetection/fake_dataset/features/",
+        "train_annot_folder": "/home/jacopo.gasparetto/Workspaces/DeepCalculatorBot/ObjectDetection/fake_dataset/labels/",
+        "train_times": 8,
+        "pre_trained_weights": "full_yolo_numbers.h5",
+        "batch_size": 16,
+        "learning_rate": 0.0001,
+        "nb_epochs": 1,
+        "warmup_epochs": 3,
+        "object_scale": 5,
+        "nb_object_scale": 1,
+        "coord_scale": 1,
+        "class_scale": 1, 
+        "saved_weights_name": "full_yolo_numbers.h5",
+        "debug": true
+    },
+    "valid": {
+        "valid_image_folder": "",
+        "valid_annot_folder": "",
+        "valid_times": 1
+    }       
+}
