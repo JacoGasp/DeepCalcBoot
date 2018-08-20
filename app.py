@@ -1,8 +1,8 @@
 import json
-from handwriting_recognition import *
 from mathematics import *
 import telepot
 from telepot.loop import MessageLoop
+from handwriting_recognition import *
 import time
 import os
 import logging
@@ -12,7 +12,11 @@ from logging.config import dictConfig
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 should_listen = True
-bot = telepot.Bot("***REMOVED***")
+bot = None
+
+# Load tokens
+with open(os.path.join(dir_path, "tokens.yaml"), "rt") as token_file:
+    tokens = yaml.safe_load(token_file.read())
 
 
 def evaluate_math_expression_from_image(image_file):
@@ -73,6 +77,8 @@ if __name__ == "__main__":
     dictConfig(config)
 
     try:
+        bot = telepot.Bot(tokens["telegram_bot_key"])
+
         logger.info("Good morning! I'm now listening to new messages.\n")
         start_listening_bot()
 

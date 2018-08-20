@@ -2,9 +2,7 @@ import telepot
 from telepot.loop import MessageLoop
 import time
 from pprint import pprint
-from app import logger
-
-bot = telepot.Bot("***REMOVED***")
+from app import logger, bot
 
 
 def on_messaged_arrived(msg):

@@ -1,12 +1,9 @@
 import requests
-import logging
+from app import *
 
 logger = logging.getLogger('DeepCalculatorBot')
 
-subscription_key = "3f81c5a2ea2749a182845adeea68580e"
-assert subscription_key
-
-vision_base_url = "https://westcentralus.api.cognitive.microsoft.com/vision/v2.0/"
+vision_base_url = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/"
 text_recognition_url = vision_base_url + "RecognizeText"
 
 
@@ -14,8 +11,8 @@ def query_cognitive_vision(image_data):
     # Note: The request parameter changed for APIv2.
     # For APIv1, it is 'handwriting': 'true'.
     logger.info("Querying Cognitive Services")
-    params = {'mode': 'Handwritten'}
-    headers = {'Ocp-Apim-Subscription-Key': subscription_key,
+    params = {'handwriting': 'true'}
+    headers = {'Ocp-Apim-Subscription-Key': tokens["microsoft_cognitive_key"],
                'Content-Type': 'application/octet-stream'}
 
     response = requests.post(text_recognition_url, headers=headers,
